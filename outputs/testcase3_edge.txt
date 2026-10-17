@@ -1,0 +1,43 @@
+==============================================================================
+TEST CASE 3 - EDGE-CASE DATASET (dataset_edge.csv)
+==============================================================================
+Records received  : 10
+Records analyzed  : 9   (invalid: 1)
+Customers         : 3
+Total units       : 191
+Total TOU bill    : Rs 660
+Avg units/record  : 21.22
+------ PER-CUSTOMER ANALYSIS (ranked by total units) -------------------------
+[1] C05 Anita Menon | 89 units | TOU bill Rs 314 | slab bill Rs 345
+    Daily units    : 37 -> 12 -> 40
+    FSM path       : LOW -> OVERLOAD -> MODERATE -> OVERLOAD
+    Final state    : OVERLOAD
+    Trend (SymPy)  : y = 1.5000x + 26.6667  =>  day 4 prediction: 32.67 units
+    Recommendation : Overload detected - take immediate action to cut peak demand.
+
+[2] C10 Ravi Shankar | 60 units | TOU bill Rs 202 | slab bill Rs 200
+    Daily units    : 10 -> 20 -> 30
+    FSM path       : LOW -> MODERATE -> HIGH -> OVERLOAD
+    Final state    : OVERLOAD
+    Trend (SymPy)  : y = 10.0000x + 0.0000  =>  day 4 prediction: 40 units
+    Recommendation : Overload detected - take immediate action to cut peak demand.
+
+[3] C06 Vikram Rao | 42 units | TOU bill Rs 144 | slab bill Rs 126
+    Daily units    : 0 -> 17 -> 25
+    FSM path       : LOW -> LOW -> MODERATE -> HIGH
+    Final state    : HIGH
+    Trend (SymPy)  : y = 12.5000x - 11.0000  =>  day 4 prediction: 39 units
+    Recommendation : High load - review appliances, consider rooftop solar.
+
+------ HIGH-USAGE RECORDS (total units >= 20 per day) ------------------------
+  rec 1   C05 Anita Menon on 2026-10-01 : 37 units (bill Rs 130)
+  rec 3   C05 Anita Menon on 2026-10-03 : 40 units (bill Rs 142)
+  rec 6   C06 Vikram Rao on 2026-10-03 : 25 units (bill Rs 86)
+  rec 8   C10 Ravi Shankar on 2026-10-02 : 20 units (bill Rs 68)
+  rec 9   C10 Ravi Shankar on 2026-10-03 : 30 units (bill Rs 102)
+
+------ BUDGET ADVICE (SymPy slab solve) --------------------------------------
+  Monthly budget        : Rs 500
+  Max units allowed     : 120 units
+  Customers over budget : none
+==============================================================================

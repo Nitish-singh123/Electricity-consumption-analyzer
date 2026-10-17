@@ -1,0 +1,45 @@
+==============================================================================
+TEST CASE 2 - HIGH-USAGE DATASET (dataset_high.csv)
+==============================================================================
+Records received  : 9
+Records analyzed  : 9   (invalid: 0)
+Customers         : 3
+Total units       : 291
+Total TOU bill    : Rs 1040
+Avg units/record  : 32.33
+------ PER-CUSTOMER ANALYSIS (ranked by total units) -------------------------
+[1] C07 Suresh Iyer | 140 units | TOU bill Rs 506 | slab bill Rs 600
+    Daily units    : 44 -> 48 -> 48
+    FSM path       : LOW -> OVERLOAD -> OVERLOAD -> OVERLOAD
+    Final state    : OVERLOAD
+    Trend (SymPy)  : y = 2.0000x + 42.6667  =>  day 4 prediction: 50.67 units
+    Recommendation : Overload detected - take immediate action to cut peak demand.
+
+[2] C08 Meena Nair | 102 units | TOU bill Rs 370 | slab bill Rs 410
+    Daily units    : 31 -> 35 -> 36
+    FSM path       : LOW -> OVERLOAD -> OVERLOAD -> OVERLOAD
+    Final state    : OVERLOAD
+    Trend (SymPy)  : y = 2.5000x + 29.0000  =>  day 4 prediction: 39 units
+    Recommendation : Overload detected - take immediate action to cut peak demand.
+
+[3] C09 Iqbal Sheikh | 49 units | TOU bill Rs 164 | slab bill Rs 147
+    Daily units    : 9 -> 12 -> 28
+    FSM path       : LOW -> LOW -> MODERATE -> HIGH
+    Final state    : HIGH
+    Trend (SymPy)  : y = 9.5000x - 2.6667  =>  day 4 prediction: 35.33 units
+    Recommendation : High load - review appliances, consider rooftop solar.
+
+------ HIGH-USAGE RECORDS (total units >= 20 per day) ------------------------
+  rec 1   C07 Suresh Iyer on 2026-10-01 : 44 units (bill Rs 158)
+  rec 2   C08 Meena Nair on 2026-10-01 : 31 units (bill Rs 112)
+  rec 4   C07 Suresh Iyer on 2026-10-02 : 48 units (bill Rs 176)
+  rec 5   C08 Meena Nair on 2026-10-02 : 35 units (bill Rs 126)
+  rec 7   C07 Suresh Iyer on 2026-10-03 : 48 units (bill Rs 172)
+  rec 8   C08 Meena Nair on 2026-10-03 : 36 units (bill Rs 132)
+  rec 9   C09 Iqbal Sheikh on 2026-10-03 : 28 units (bill Rs 94)
+
+------ BUDGET ADVICE (SymPy slab solve) --------------------------------------
+  Monthly budget        : Rs 500
+  Max units allowed     : 120 units
+  Customers over budget : C07
+==============================================================================

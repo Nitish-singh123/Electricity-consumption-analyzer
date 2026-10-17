@@ -1,0 +1,22 @@
+test_invalid_records_are_reported_not_crashing (tests.EdgeCaseTests.test_invalid_records_are_reported_not_crashing) ... ok
+test_single_day_consumer (tests.EdgeCaseTests.test_single_day_consumer) ... ok
+test_fsm_path_for_rising_usage (tests.FSMTests.test_fsm_path_for_rising_usage) ... ok
+test_input_band_boundaries (tests.FSMTests.test_input_band_boundaries) ... ok
+test_transition_boundaries (tests.FSMTests.test_transition_boundaries) ... ok
+test_transition_table_is_complete (tests.FSMTests.test_transition_table_is_complete) ... ok
+test_closure_with_custom_rates (tests.FunctionalProgrammingTests.test_closure_with_custom_rates) ... ok
+test_default_tou_closure (tests.FunctionalProgrammingTests.test_default_tou_closure) ... ok
+test_filter_and_reduce_pipeline (tests.FunctionalProgrammingTests.test_filter_and_reduce_pipeline) ... ok
+test_map_enrich_does_not_mutate_input (tests.FunctionalProgrammingTests.test_map_enrich_does_not_mutate_input) ... ok
+test_end_to_end_analysis (tests.IntegrationTests.test_end_to_end_analysis) ... ok
+test_malformed_json_is_rejected_gracefully (tests.IntegrationTests.test_malformed_json_is_rejected_gracefully) ... ok
+test_server_refuses_double_bind (tests.IntegrationTests.test_server_refuses_double_bind) ... ok
+test_budget_break_even_solve (tests.SymPyTests.test_budget_break_even_solve) ... ok
+test_slab_bill (tests.SymPyTests.test_slab_bill) ... ok
+test_trend_equation_sign_formatting (tests.SymPyTests.test_trend_equation_sign_formatting) ... ok
+test_trend_fit_and_prediction (tests.SymPyTests.test_trend_fit_and_prediction) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.330s
+
+OK
