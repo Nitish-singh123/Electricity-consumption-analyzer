@@ -1,5 +1,5 @@
 ==============================================================================
-TEST CASE 3 - EDGE-CASE DATASET (dataset_edge.csv)
+TEST CASE 3 - EDGE-CASE DATASET
 ==============================================================================
 Records received  : 10
 Records analyzed  : 9   (invalid: 1)

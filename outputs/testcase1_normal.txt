@@ -1,5 +1,5 @@
 ==============================================================================
-TEST CASE 1 - NORMAL DATASET (dataset.csv)
+TEST CASE 1 - NORMAL DATASET
 ==============================================================================
 Records received  : 12
 Records analyzed  : 12   (invalid: 0)

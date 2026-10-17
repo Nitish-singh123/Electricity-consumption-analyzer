@@ -1,5 +1,5 @@
 ==============================================================================
-TEST CASE 2 - HIGH-USAGE DATASET (dataset_high.csv)
+TEST CASE 2 - HIGH-USAGE DATASET
 ==============================================================================
 Records received  : 9
 Records analyzed  : 9   (invalid: 0)
