@@ -18,6 +18,7 @@ Legend: ✅ done · 🔜 next · ⬜ not started · ⛔ blocked
 - ✅ Create `brain/` packet: PRD, ARCHITECTURE, DESIGN, RULES, TASKS, TEST_PLAN,
   SECURITY, DECISIONS, MEMORY.
 - ✅ Phase 0 audit: re-ran suite + three test cases; labeled `docs/BACKEND_SPEC.md` as Figma-draft; added `.cursor/rules` (no duplicate Brain packet).
+- ✅ Figma MCP: screenshot-inspected all 15 frames; updated `DESIGN.md` §8, BACKEND_SPEC inventory, and conflict notes. Visual direction still D-8.
 - Exit: docs describe the as-is app; baseline recorded from this run; no app edits.
 
 ---

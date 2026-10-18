@@ -27,6 +27,8 @@ ADR in `DECISIONS.md` first.
 - R-10 Keep analysis formulas in **one** module once extracted. No copy-paste
   of rates or slab logic into the UI or exporters.
 - R-11 Do not modify application code in a documentation-only phase.
+- R-11a Figma illustration numbers, USD rates, and household sample copy are
+  **not** analysis inputs. Do not change INV-1…INV-11 or goldens to match Figma.
 
 ## 3. Code quality (when implementation starts)
 

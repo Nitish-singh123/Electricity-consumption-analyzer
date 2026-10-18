@@ -158,7 +158,9 @@ that live `testcases.py` now prints; numbers match.
 - A4 Phase 1 is single-tenant (one app, many users, no orgs).
 - A5 Next.js + FastAPI + Supabase is the **proposed default** stack, not yet accepted
   (ADR-010–012).
-- A6 Currency is Indian rupees as in the current report copy (`Rs`).
+- A6 Currency is Indian rupees as in the current report copy (`Rs`). Figma mocks
+  use **USD and made-up kWh/bill figures**; those are illustration only and do
+  **not** override this assumption or INV-5…INV-7.
 
 ## 11. Risks
 
@@ -187,4 +189,6 @@ that live `testcases.py` now prints; numbers match.
 ## 14. Open questions
 
 See `DECISIONS.md` D-1…D-8. Highest product impact: account linking, session
-strategy, fate of the TCP CLI, export/share policy, and visual direction.
+strategy, fate of the TCP CLI, export/share policy, and visual direction (D-8:
+Figma “Current” is now observed in `DESIGN.md` §8, still unaccepted). Also
+decide household-mock vs multi-customer report, and CSV 5-column guide vs INV-9.

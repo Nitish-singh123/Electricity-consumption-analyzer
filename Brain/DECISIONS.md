@@ -78,16 +78,22 @@ Statuses: `accepted` · `proposed` · `unresolved` · `superseded`.
 | D-4 | Browser session | httpOnly cookie BFF · bearer token in the SPA | CSRF vs XSS tradeoff |
 | D-5 | Legacy TCP interface | Keep (strangler) · retire after web GA | Assignment vs product |
 | D-6 | Export and sharing | CSV · PDF · signed read-only link · none in Phase 1 | Injection + privacy |
-| D-7 | Charts in Phase 1 | Yes · tables only | Blocked on visual design |
-| D-8 | Visual / brand direction | — | Explicitly deferred in `DESIGN.md`. A Figma file and `docs/BACKEND_SPEC.md` exist as **drafts**; they are not accepted ADRs. |
+| D-7 | Charts in Phase 1 | Yes · tables only | Figma shows a 6-bar usage chart `[figma-obs]`; still not accepted |
+| D-8 | Visual / brand direction | Accept Figma “Current” · adapt · reject | File **Untitled** fully MCP-inspected 2026-10-18 (`DESIGN.md` §8). Observation ≠ acceptance. |
 
 ### Additional product questions (not ADRs yet)
 
-- Password policy details for email sign-up.
+- Password policy details for email sign-up. Figma copy: “Use at least 8 characters.”
+  `[figma-obs]` — not an accepted policy.
 - Duplicate file uploads: reject vs new dataset.
-- Report naming: auto vs user-supplied.
+- Report naming: auto vs user-supplied. Figma uses month titles (“September 2026”).
 - Whether `customers_over_budget: ["none"]` stays in the JSON contract for the web API
   or is replaced by `[]` **only after** an ADR (printer currently depends on `"none"`).
+- Whether the UI is a **household energy story** (Figma) or the **multi-customer
+  analyzer report** (PRD FR-C3). Mixing them without an ADR would hide FSM/slab.
+- Figma USD illustration vs locked `Rs` / INV-5–7: **keep analyzer numbers**.
+- CSV guide 5 columns vs INV-9 7 columns; `off_peak_units` vs `offpeak_units`.
+- Figma “no report if two rows fail” vs INV-10 (analyse valid rows).
 
 ## Template
 

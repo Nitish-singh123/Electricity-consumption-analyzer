@@ -40,7 +40,10 @@ Acceptable for a local assignment; **not** for a hosted product:
 ## 4. Authentication requirements
 
 - S-1 Email/password: hashed by the IdP (Supabase Auth in the default proposal);
-  verification + reset; no custom crypto.
+  verification + reset; no custom crypto. Figma shows email verification after
+  sign-up and a **minimum 8-character** hint `[figma-obs]`; exact policy is still
+  an owner decision (Q9). Generic credential errors match the Figma copy
+  “The email or password isn’t right.”
 - S-2 Google OAuth (OIDC): `state` / PKCE; validate issuer/audience/expiry.
 - S-3 GitHub OAuth: handle private/missing email explicitly.
 - S-4 Sessions: short-lived access, refresh, revocation, logout-everywhere.

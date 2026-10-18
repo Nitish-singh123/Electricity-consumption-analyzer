@@ -94,6 +94,7 @@ See `TEST_PLAN.md` for the full recorded figures.
 |---|---|---|
 | 2026-10-18 | Stage 0 — inspect + `brain/` docs | 17 tests OK; TC1–3 live OK; 9 markdown files; **no app code changes** |
 | 2026-10-18 | Stage 0 — audit/reconcile | Re-ran 17 tests (0.316s OK) + `testcases.py all`; labeled BACKEND_SPEC Figma items as unapproved; added `.cursor/rules`; **no app logic changes** |
+| 2026-10-18 | Stage 0 — Figma MCP inspect | All **15** frames screenshot-inspected via Figma MCP; tokens/copy in `DESIGN.md` §8; Figma USD/420 kWh flagged as **sample only**; **no app/analyzer changes** |
 
 ## 9. Next (wait for instruction)
 
@@ -101,7 +102,7 @@ See `TEST_PLAN.md` for the full recorded figures.
 2. Call D-1…D-8 as needed (D-2, D-4, D-5, D-8 matter earliest).
 3. Recommended next phase: **Stage 1** — extract `analyzer_core` (behavior-preserving) + `.gitignore` + `pyproject.toml`. Do not start UI/auth/DB until that lands and ADR-010–012 are confirmed.
 
-Do **not** start implementation or pick a visual design until asked.
+Do **not** start implementation or treat Figma as accepted until D-8 is called.
 
 ## 10. Glossary
 

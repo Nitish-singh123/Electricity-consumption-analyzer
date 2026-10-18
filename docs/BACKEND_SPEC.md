@@ -1,62 +1,51 @@
 # BACKEND_SPEC — Electricity Consumption Analyzer (Web)
 
 Status: **Draft / assumptions-heavy** · Last updated: 2026-10-18  
-**Phase 0 audit:** this file is **not** an approved product spec. Visual design is **undecided**
-(`Brain/DESIGN.md`, D-8). Do not implement from Figma-derived screens, copy, or tokens until
-the owner selects a direction.
+**Phase 0:** this file is **not** an approved product spec. Visual design is **not accepted**
+(`Brain/DESIGN.md` D-8) even though Figma was fully MCP-inspected. Do not implement from
+Figma-derived screens, copy, or tokens until the owner selects a direction.
 
 Precedence (must win over this draft):
 1. Cursor chat instructions
 2. Behavior in `server.py` / `client.py` / `tests.py` / datasets
 3. `Brain/DECISIONS.md` and `Brain/PRD.md`
 4. Other Brain docs
-5. **This file** — API/schema ideas may be reused later; Figma inventory is `[figma-draft]`
+5. **This file** — API/schema ideas may be reused later; Figma inventory is `[figma-obs]`, not UX law
 
 What **is** evidence-backed here: INV checklist and analysis JSON contract (`[code]`), matching
-`Brain/PRD.md`. What is **not**: approved UI, 5-column upload guide vs 7-column CSV, editable
-chart, nav labels, async upload jobs, password policy, file caps, “estimated total” mapping.
+`Brain/PRD.md`. What is **not**: approved UI. Figma uses USD household mocks; the analyzer uses
+`Rs` and INV-5…INV-7. Illustration numbers are **never** report data.
 
 Sources of truth used:
 - **Calculations/behaviour:** `server.py`, `client.py`, `tests.py`, `testcases.py`, `README.md`,
   `dataset.csv`, `dataset_high.csv`, `dataset_edge.csv` (unchanged — see §0.3).
 - **Phase 0 docs:** `Brain/PRD.md`, `Brain/ARCHITECTURE.md`, `Brain/DESIGN.md`, `Brain/DECISIONS.md`,
   `Brain/RULES.md`, `Brain/SECURITY.md`, `Brain/TEST_PLAN.md`, `Brain/TASKS.md`, `Brain/MEMORY.md`.
-- **Design (UNAPPROVED draft):** a Figma file was used in an earlier session
-  (`figma.com/design/QpIaPoDpZVCS2jno7Gn6Nk/Untitled`, 15 frames). Treat frames as
-  `[figma-draft]`, not as locked UX.
+- **Design (UNAPPROVED, MCP-inspected):** [Untitled](https://www.figma.com/design/QpIaPoDpZVCS2jno7Gn6Nk/Untitled?node-id=0-1)
+  — all 15 frames screenshot-inspected. Full visual notes live in `Brain/DESIGN.md` §8.
 
-> **Legend used throughout:** `[obs]` = directly observed in the Figma file ·
-> `[inf]` = necessary inference (needs your confirmation) · `[code]` = taken verbatim from the
-> existing analyzer code.
+> **Legend:** `[figma-obs]` / `[obs]` = MCP screenshot + layer structure ·
+> `[inf]` = inference · `[code]` = analyzer · `[unknown]` = prototype/hover/keyboard not exposed.
 
 ---
 
 ## 0. How this spec was derived
 
-### 0.1 Figma access — important disclosure
-You asked me to use the design **through the connected Figma MCP server**. I verified that
-**no Figma MCP server is connected** and could not use one:
+### 0.1 Figma access (updated 2026-10-18)
+Figma MCP **is connected** in Cursor (`whoami` + `get_metadata` + `get_design_context` with
+screenshots). File key `QpIaPoDpZVCS2jno7Gn6Nk`, page **Page 1**, document name **Untitled**.
 
-- The tool catalog contains **no Figma/MCP tools** (`search` for `figma`, `mcp`, `get_design`,
-  `code_connect` returns only the generic `opencode.list_mcp_resources` / `read_mcp_resource`).
-- `list_mcp_resources({})` returns **empty** `resources` and `templates`.
-- `list_mcp_resources({server:"figma"})` → **`MCP server not found: figma`**.
+All **15** top-level frames were visually inspected (screenshot viewed), including the 13 that
+were remaining after Sign in · Desktop and Foundations. Named variables on Foundations
+returned `{}`. Prototype/motion was **not** confirmed (`get_motion_context` interrupted) —
+interactions stay `[unknown]`.
 
-I did **not** guess. Instead I read the **same Figma file** through the browser tab already open
-in this session (valid share token), the same way as earlier. That gives me the **complete layer
-tree** (all 15 frames, expanded recursively: 1 385 rows) — i.e. every screen, region, component
-and state present in the file.
-
-**What the browser route cannot give me:** the literal copy strings, hex colours, font sizes and
-spacings. Those live on the canvas and are not exposed as DOM text. Where the design's *intent*
-depends on such a value I have marked it `[inf]` and raised a question in §7 rather than inventing
-it. If you want the exact tokens/copy, please connect the Figma MCP server (or paste Dev Mode
-values) and I will fold them in.
+Earlier drafts of this file that said “no MCP / browser-only / unreadable copy” are **superseded**.
+Token and copy details are in `Brain/DESIGN.md` §8.
 
 ### 0.2 Scope discipline
 Sections 1–2 inventory a **Figma draft**. They are **not** Phase 0 requirements. Product
-behavior is INV-1…INV-11 in `Brain/PRD.md`. `[inf]` and `[obs]` items stay open until the
-owner picks a visual direction (D-8) and answers §7.
+behavior is INV-1…INV-11 in `Brain/PRD.md`. `[figma-obs]` stays unaccepted until D-8.
 
 ### 0.3 Existing analyzer is unchanged
 No file outside `docs/` was created or modified in this phase. The analyzer, tests and datasets are
@@ -66,176 +55,109 @@ untouched; calculations below are quoted from the current code and are the autho
 
 ## 1. Figma screen inventory and the user actions each supports
 
-The file contains **15 frames** `[obs]`, grouped into four families:
+The file contains **15 frames** `[figma-obs]`, grouped into four families. Copy below is
+from MCP, not inferred. **USD / 420 kWh / $109.20 / $130 budget / $20.80** are sample
+illustration only.
 
-| # | Frame `[obs]` | Family | Purpose |
-|---|---|---|---|
-| 1 | **Sign in · Desktop** | Auth | Email/password + Google/GitHub sign-in (desktop) |
-| 2 | **Sign in · Mobile** | Auth | Same, mobile layout |
-| 3 | **Sign up · Desktop** | Auth | Account creation (desktop) |
-| 4 | **Sign up · Mobile** | Auth | Same, mobile layout |
-| 5 | **Dashboard · Desktop** | App | Home: latest dataset, monthly summary, recent reports |
-| 6 | **Dashboard · Mobile** | App | Same, mobile layout |
-| 7 | **Upload dataset · Desktop** | App | Choose/upload a CSV; column guide; sample data |
-| 8 | **Upload dataset · Mobile** | App | Same, mobile layout |
-| 9 | **Analysis results · Desktop** | App | The report |
-| 10 | **Analysis results · Mobile** | App | Same, mobile layout |
-| 11 | **Dashboard · Desktop · New account** | Empty state | First-run dashboard (no datasets) |
-| 12 | **Dashboard · Mobile · New account** | Empty state | Same, mobile layout |
-| 13 | **Account feedback · Validation and verification** | Feedback | Auth form/error/verification states |
-| 14 | **Upload feedback · Progress, success and errors** | Feedback | Upload progress/success/error states |
-| 15 | **Current · Foundations and patterns** | System | Palette, typography/spacing, field & feedback patterns |
+| # | Frame `[figma-obs]` | Node | Family | Purpose |
+|---|---|---|---|---|
+| 1 | **Sign in · Desktop** | `2:11990` | Auth | Email/password + Google/GitHub (split layout) |
+| 2 | **Sign in · Mobile** | `2:12058` | Auth | Same form; no welcome panel |
+| 3 | **Sign up · Desktop** | `2:12099` | Auth | OAuth first, then name/email/password |
+| 4 | **Sign up · Mobile** | `2:12176` | Auth | Same, stacked |
+| 5 | **Dashboard · Desktop** | `2:12226` | App | Home: latest month, 3 cards, 3 reports |
+| 6 | **Dashboard · Mobile** | `2:12335` | App | Same, stacked + bottom nav |
+| 7 | **Upload dataset · Desktop** | `2:12425` | App | Drop CSV; 5-column guide; Rowan House sample |
+| 8 | **Upload dataset · Mobile** | `2:12541` | App | Browse-first |
+| 9 | **Analysis results · Desktop** | `2:12648` | App | Household report mock |
+| 10 | **Analysis results · Mobile** | `2:12779` | App | Same; no third key-figure card |
+| 11 | **Dashboard · Desktop · New account** | `2:12899` | Empty | First-run |
+| 12 | **Dashboard · Mobile · New account** | `2:12950` | Empty | First-run; 3 step rows |
+| 13 | **Account feedback · Validation and verification** | `2:13005` | Feedback | 4 auth states |
+| 14 | **Upload feedback · Progress, success and errors** | `2:13072` | Feedback | 3 upload states |
+| 15 | **Current · Foundations and patterns** | `2:13139` | System | Tokens (see DESIGN §8.2) |
 
-### 1.1 Sign in · Desktop `[obs]`
-Two regions: a marketing **Welcome panel** and the **Account area**.
+### 1.1 Sign in · Desktop `[figma-obs]`
+Split layout: 500 px **Welcome panel** (`#F0F5FC`) + form.
 
-- Welcome panel: brand mark + brand name; "Energy introduction" (promise heading + description,
-  an illustrative energy card with example usage + unit, an illustrative trend of six usage bars,
-  a status chip); a "Reassurance" line with a shield-check icon + description.
-- Account area: **Utility links → Help**; a sign-in form:
-  - Page heading (title + description).
-  - **Email field** (label + input + value).
-  - **Password field** (label + input + value + visibility toggle `eye-off`).
-  - A password-recovery action (forgot-password) `[inf: item present, exact copy not readable]`.
-  - **Sign in** action (primary button).
-  - **Alternative divider** (divider + label + divider).
-  - **Social account options:** "Continue with Google" (Google mark + label), "Continue with GitHub" (github icon + label).
-  - **Create account prompt** (link to sign-up).
-  - **Legal links** (Privacy · Terms).
-- **Actions:** enter email; enter password; toggle password visibility; submit sign-in; recover
-  password; continue with Google; continue with GitHub; go to create account; open Help; open
-  Privacy/Terms.
+- Brand **current**; “Less guessing. / More clarity.”; card **420 kWh in September**; six bars;
+  chip **“$20.80 under budget”** (sample USD); “Your data stays in your account.”
+- Form: “Need help?” · “Welcome back” · “Sign in to understand your energy use.” · Email
+  `you@example.com` · Password + `eye-off` · **Forgot password?** · **Sign in** · “or continue with”
+  **Continue with Google / GitHub** · “New to Current? **Create an account**” · Privacy · Terms.
+- Prototype destinations `[unknown]`.
 
-### 1.2 Sign in · Mobile `[obs]`
-Same **Account area** as desktop; the Welcome panel is dropped and a compact "Mobile brand"
-header is used instead. Same actions.
+### 1.2 Sign in · Mobile `[figma-obs]`
+Same form; welcome panel omitted; brand in header; title 27 px; padding 24 px. No “Need help?”.
 
-### 1.3 Sign up · Desktop `[obs]`
-Welcome panel (as above) + Account area:
-- Page heading (title + description).
-- **Social account options:** "Sign up with Google", "Sign up with GitHub".
-- **Alternative divider**.
-- **Registration fields:** **Name field**, **Email field**, **Password field** (+ a `Hint`
-  sub-label), **Confirm password field**; a description; **Create account** action.
-- **Sign in prompt** (link to sign-in); **Legal links** (Privacy · Terms).
-- **Actions:** sign up with Google/GitHub; enter name/email/password/confirm; toggle visibility;
-  submit create-account; go to sign-in; open Help/Privacy/Terms.
+### 1.3 Sign up · Desktop `[figma-obs]`
+Same welcome panel (including **$20.80 under budget** sample). Form: “Make sense of your energy” /
+“Create your free Current account.” **Sign up with Google/GitHub first**, then “or use your email.”
+Name, Email, Password (hint **Use at least 8 characters.**), Confirm password. Verification email
+note. **Create account**. “Already have an account? **Sign in**”. Privacy · Terms.
 
-### 1.4 Sign up · Mobile `[obs]`
-Same Account area + Mobile brand; same actions.
+### 1.4 Sign up · Mobile `[figma-obs]`
+Same fields as desktop; no welcome panel.
 
-### 1.5 Dashboard · Desktop `[obs]`
-- **App header:** brand (mark + name + product descriptor); **Main navigation** with **4 items**:
-  icons `layout-dashboard`, `files`, `chart-no-axes-column`, `settings`
-  `[inf: labels ≈ Dashboard / Datasets / Reports / Settings — labels are unreadable text nodes]`;
-  **Account → Initials** (avatar).
-- **Page content:**
-  - **Welcome and action:** page heading (title + description) + an **"Upload a dataset"** action (upload icon).
-  - **Latest dataset context:** a period + a status chip (status dot + label).
-  - **Monthly summary:** **3 summary cards**, each `label+icon → value → supporting detail`;
-    icons `zap`, `wallet`, `circle-check`.
-  - **Recent reports:** section heading with a **report count**; a table with column labels
-    (name · date · figures · action); **3 recent report rows**, each = report symbol
-    (`file-chart-column`) + report title + report date + created date + report figures
-    (**Usage**, **Estimated bill**) + a **"View report"** action (`arrow-up-right`); plus a description.
-  - **Page footer:** footer note + Help link.
-- **Actions:** navigate to the four primary destinations; start upload; open a recent report;
-  view latest dataset period/status; read monthly summary.
+### 1.5 Dashboard · Desktop `[figma-obs]`
+Header: **current · Electricity analyzer**; nav **Dashboard / Datasets / Reports / Settings**
+(Dashboard active); avatar **AM**. “Hello, Alex” / “Your latest month, at a glance.” **Upload a
+dataset**. Context “Rowan House · 1–30 September 2026” · “Latest report”. Cards: **420 kWh**
+(252 peak · 168 off-peak); **$109.20** (“Illustrative rates, not a utility bill”); **On track**
+(“$20.80 left of your $130 budget”). Recent reports ×3 (Sep/Aug/Jul 2026) with **View report**.
+Footnote `$0.30` peak / `$0.20` off-peak. Footer Help. Datasets/Reports/Settings screens **not drawn**.
 
-### 1.6 Dashboard · Mobile `[obs]`
-Same content without the table's column headings, plus a bottom **Main navigation** bar. Same actions.
+### 1.6 Dashboard · Mobile `[figma-obs]`
+Same numbers; upload full-width under heading; cards stacked; compact report rows; bottom nav;
+no table headers; no footer Help.
 
-### 1.7 Upload dataset · Desktop `[obs]`
-- App header (+ a **Back link**).
-- Page heading (title + description).
-- **Upload steps:** 3 steps, each = step marker (step number) + step label.
-- **CSV drop area:** upload symbol (`cloud-upload`); drop instructions (drop heading + description);
-  **"Browse files"** (`folder-open`); a file-limits note.
-- **File preparation → Expected columns** table: guide heading (title + description); table headings
-  (**column · example · help**); and **exactly 5 column definitions**, each = column name
-  (field label + **CSV header**) + example value + format hint. See §5.1 for the 5-versus-7 mismatch.
-- **Sample dataset help:** `file-spreadsheet` icon; sample explanation (title + description);
-  **"Try sample data"**; a **download** link for the sample; a description.
-- **Privacy note** (`shield-check` + description).
-- Page footer.
-- **Actions:** go back; drag-and-drop a CSV; browse files; read the column guide; try sample data;
-  download the sample; read the privacy note.
+### 1.7 Upload dataset · Desktop `[figma-obs]`
+Back “Dashboard”. “Upload your dataset”. Steps **1 Upload** (active) · 2 Check file · 3 View report.
+Drop: “Drag and drop your CSV here” · Browse files · “CSV only · Up to 10 MB”. Guide: **five**
+headers `customer_id`, `customer_name`, `date`, `peak_units`, **`off_peak_units`**. Sample:
+Rowan House 30 days · Try sample data · Download sample CSV. See §5.1 mismatch with INV-9.
 
-### 1.8 Upload dataset · Mobile `[obs]`
-Same, with a "Back to dashboard" link and a bottom Main navigation bar; the expected-columns guide
-shows `Date format` on one column. Same actions.
+### 1.8 Upload dataset · Mobile `[figma-obs]`
+Browse-first (“Choose your CSV file”); drag mentioned as extra. Columns stacked (date shows
+YYYY-MM-DD on the row). Datasets nav active. Bottom nav.
 
-### 1.9 Analysis results · Desktop `[obs]`  ← the report
-- App header (+ nav + account avatar).
-- **Report breadcrumb:** back arrow + back link + separator + current report.
-- **Report header:** page heading (title + description) + **status** (status dot + label).
-- **Plain-language summary:** summary title + description.
-- **Key figures:** **3 summary cards** (icons `zap`, `wallet`, `calendar-days`), each
-  `label+icon → value → supporting detail`.
-- **Consumption trend:** chart heading (title + legend {swatch + label}); usage-axis title;
-  an **"Editable usage chart"** containing axis ticks+gridlines, **usage bars** (the design uses the
-  same component 6×, labelled "Five-day usage"), and date ticks (**6 date labels**); a
-  consumption date-axis title; a chart caption.
-- **Bill and budget:**
-  - **Estimated bill details:** bill heading (title + description); **2 bill lines**, each =
-    charge description (**charge label** + **calculation**) + **amount**; an **estimated total**
-    (total label + total); a description.
-  - **Monthly budget:** budget heading (title + `circle-check`); **budget remaining**
-    (amount + description); a **budget meter** (**used**); a description.
-- Page footer.
-- **Actions:** go back to the report list; read key figures; read the trend chart; read bill lines;
-  read budget status.
+### 1.9 Analysis results · Desktop `[figma-obs]`
+Household mock — **not** the analyzer’s multi-customer report. Breadcrumb Reports / September 2026.
+“Your September energy report” · “Report ready”. Summary uses **420 kWh / $109.20 / $20.80 / $130**.
+Three cards (usage, estimated bill, **14 kWh** daily average for C001). Layer **“Editable usage
+chart”**: six 5-day bars; **no edit controls visible**. Bill lines: 252 kWh × **$0.30** = $75.60;
+168 kWh × **$0.20** = $33.60; total $109.20. Budget 84% of $130. Source
+`rowan-house-sep-2026.csv`. Missing vs PRD FR-C3: FSM, slab, TOU-as-Rs, ranking, high-usage, trend.
 
-### 1.10 Analysis results · Mobile `[obs]`
-Same content + bottom Main navigation. Same actions.
+### 1.10 Analysis results · Mobile `[figma-obs]`
+Same bill/budget/chart; two key-figure cards (daily average folded into usage caption); bottom
+nav Reports active.
 
-### 1.11 Dashboard · Desktop · New account `[obs]` (empty state)
-- **Welcome and action:** page heading.
-- **No datasets:** a first-dataset illustration (`file-chart-column`) + an empty-state explanation
-  (heading + description) + **first actions (Upload a dataset, Try sample data)** + a supported-file
-  note (`info` icon).
-- **What to expect:** section heading + getting-started steps (`circle-check` + description) —
-  **1 step on desktop, 3 steps on mobile** (content is a design-mock detail).
-- **Actions:** upload a dataset; try sample data.
+### 1.11–1.12 New-account dashboards `[figma-obs]`
+“Welcome, Alex” · empty “Your energy story starts here” · Upload a dataset · Try sample data ·
+“CSV files up to 10 MB”. Desktop: one combined step line. Mobile: three rows (Upload / Check /
+Understand).
 
-### 1.12 Dashboard · Mobile · New account `[obs]`
-Same, with 3 getting-started steps + bottom Main navigation.
+### 1.13 Account feedback `[figma-obs]`
 
-### 1.13 Account feedback · Validation and verification `[obs]` — auth states
-Four labelled states of the auth forms:
-
-| State `[obs]` | Contents `[obs]` | Backend meaning `[inf]` |
+| State | Visible copy | Backend meaning `[inf]` |
 |---|---|---|
-| **Sign in · Required field validation** | email field with `circle-alert` + validation message; password field + validation message; Sign in | Client/server required-field validation failed |
-| **Sign in · Incorrect credentials** | error message (icon + title + description); recovery actions (recovery link + "Try again") | Auth rejected the credentials |
-| **Sign up · Password validation** | password field + validation message; confirm-password field + validation message; Create account + description | Password policy / mismatch failure |
-| **Sign up · Email verification sent** | `mail-check` symbol; verification instructions (heading + 2 descriptions); **Back to sign in**; **Resend verification email**; description | Sign-up succeeded, e-mail not yet confirmed |
+| Sign in / Field validation | “Check your details”; `alex@` → enter a full email; empty password | Client validation |
+| Sign in / Account error | “The email or password isn’t right.” + Forgot password? + Try again | Generic auth failure (S-6) |
+| Sign up / Field validation | “Almost there”; ≥8 characters; “Passwords don’t match.” | Policy + mismatch |
+| Sign up / Verification sent | “Check your inbox” to alex@example.com; Back to sign in; Resend | Confirm email before use |
 
-- **Actions:** retry sign-in; use recovery link; resend verification email; go back to sign-in.
+### 1.14 Upload feedback `[figma-obs]`
 
-### 1.14 Upload feedback · Progress, success and errors `[obs]` — upload states
-
-| State `[obs]` | Contents `[obs]` | Backend meaning `[inf]` |
+| State | Visible copy | Backend meaning `[inf]` |
 |---|---|---|
-| **Upload · In progress** | selected CSV (file name + file size); upload progress (progress description + percentage, progress track + fill); **Cancel upload** | Upload/validation job running |
-| **Upload · Success** | `circle-check`; success heading (title + description); selected CSV; **validated dataset summary** (row/column descriptions + status {dot + label}); **View analysis** | File accepted and parsed |
-| **Upload · CSV validation error** | heading; selected CSV; error message (icon + title + description); **validation issues** = row issues (issue label + description); **Choose corrected file** | File rejected, or accepted with row-level issues |
+| In progress | `rowan-house-sep-2026.csv` 4.2 KB; **64%**; Cancel upload | Transfer in flight |
+| Success | “All 30 readings passed our checks.” · 420 kWh · View analysis | Parsed OK |
+| Validation error | “2 rows need attention” · **“No report has been created.”** · Row 12 date missing · Row 19 peak −4 · Choose corrected file | **Conflicts with INV-10** (valid rows should still analyse) `[code]` |
 
-- **Actions:** cancel upload; view analysis; choose a corrected file.
-
-### 1.15 Current · Foundations and patterns `[obs]` — design system
-- Sheet heading (brand + descriptor) and page heading.
-- **Palette:** **6 colour references**, each = swatch + role + **hex value**
-  `[inf: role names and hex values are text, not readable via the browser route]`.
-- **Typography and spacing:** a typography reference (font family) + 4 type samples; a layout
-  reference with **7 spacing references** + radius references (control radius, card radius) +
-  responsive rules.
-- **Fields and feedback:** form patterns (field default + error states; primary/secondary/unavailable
-  button treatments); status patterns (two status labels + a success message + an error message).
-
-> This frame defines the **presentation** system. It is referenced here only because it confirms the
-> feedback vocabulary (status labels, success/error messages, button "unavailable" state) the API must
-> be able to drive. Exact tokens remain design-owned (§7, Q13).
+### 1.15 Foundations `[figma-obs]`
+Tokens and patterns: `DESIGN.md` §8.2. Palette hexes now known. Inter; spacing 4–48; 10 px
+controls; 16 px cards; desktop 1280 / 88 px; mobile 390 / 20 px.
 
 ---
 
@@ -274,8 +196,8 @@ reading, excluded from totals (INV-10); **TOU and slab are reported separately a
 | Key figure 2 (`wallet`) | `summary.total_tou_bill` **and** aggregate slab (`tou_bill`/`slab_bill` per customer) | `GET /api/v1/reports/{id}` |
 | Key figure 3 (`calendar-days`) | period (first/last date, `days`) | `GET /api/v1/reports/{id}` |
 | Consumption trend bars + date labels | `daily_units[]` + `date[]` (+ `predicted_next_day_units`, `trend_equation` for the line) | `GET /api/v1/reports/{id}` (series embedded) |
-| Bill line 1 / line 2 (`charge label` + `calculation` + `amount`) | **open** — see Q2: either TOU components (peak/off-peak) or TOU vs slab | `GET /api/v1/reports/{id}` |
-| Estimated total | `summary.total_tou_bill` (or TOU+slab — Q2) | `GET /api/v1/reports/{id}` |
+| Bill line 1 / line 2 | Figma `[figma-obs]` is peak×$0.30 and off-peak×$0.20 (sample). Product `[code]` must remain INV-5 TOU and INV-6 slab as **separate** figures — do not bind USD mock rates | `GET /api/v1/reports/{id}` |
+| Estimated total | Figma `$109.20` is sample. Product: `summary.total_tou_bill` in **Rs**; never merge slab | `GET /api/v1/reports/{id}` |
 | Budget remaining (amount + description) | `budget.monthly_budget` − spend, `budget.max_units_allowed` | `GET /api/v1/reports/{id}` |
 | Budget meter (used) | budget utilisation | `GET /api/v1/reports/{id}` |
 | (per-customer ranking, FSM path, final state, recommendation, trend, prediction) | `customers[]` (PRD FR-C3) | `GET /api/v1/reports/{id}` |
@@ -532,11 +454,11 @@ Codes: `UNAUTHENTICATED` (401), `FORBIDDEN` (403), `NOT_FOUND` (404), `VALIDATIO
 (type rules from `client.py load_dataset` `[code]`: `record_id`→int, `customer_id`/`customer_name`→
 trimmed str, `date`→`YYYY-MM-DD` str, `day_index`→int, `peak_units`/`offpeak_units`→float).
 
-> ⚠️ **Mismatch to resolve (Q3):** the design's "Expected columns" guide shows **exactly 5 columns**
-> `[obs]` (desktop and mobile), each with a *CSV header*, example and format hint — while the CSV
-> schema (INV-9) has **7 fields**. Likely the guide lists only the 5 user-meaningful columns
-> (customer id, customer name, date, peak units, off-peak units) and omits `record_id` / `day_index`.
-> **The backend will still require all 7 (INV-9) unless you decide otherwise.**
+> ⚠️ **Mismatch to resolve (Q3):** Figma guide `[figma-obs]` lists **five** headers:
+> `customer_id`, `customer_name`, `date`, `peak_units`, **`off_peak_units`**. INV-9 `[code]`
+> requires **seven**: `record_id`, `customer_id`, `customer_name`, `date`, `day_index`,
+> `peak_units`, **`offpeak_units`** (no underscore). **Backend still requires all 7 unless
+> you file an ADR.** Also: Figma examples use `C001` / Alex Morgan; goldens use C01–C11.
 
 ### 5.2 Validity rules (must reproduce INV-10 exactly)
 - **Row-level invalid (excluded, counted, reported — analysis still runs):** a reading is missing or
@@ -620,39 +542,38 @@ returned **≤ 200** (then `issues_truncated: true`). Encoding: UTF-8 (BOM toler
 ## 7. Questions and assumptions needing your review
 
 ### Questions
-- **Q1 — Figma access.** No Figma MCP server is connected; I read the file via the browser tab
-  (structure only — see §0.1). **Do you want to connect the Figma MCP server** so I can also extract
-  exact copy, hex colours and spacing, or is the structural reading sufficient?
-- **Q2 — The two bill lines.** "Estimated bill details" shows **2 bill lines** `[obs]`. Is that
-  **(a)** TOU split into peak/off-peak, **(b)** TOU vs slab, or **(c)** something else? The backend will
-  expose `tou_bill` and `slab_bill` **separately** regardless (INV-11); I just need to know what the two
-  lines and the "Estimated total" represent.
-- **Q3 — Expected-columns guide shows 5 columns, the schema has 7** (§5.1). Which columns will the UI
-  actually require? (`record_id`/`day_index` may be auto-generated.)
-- **Q4 — "Editable usage chart"** `[obs]`. Is the chart *editable* (does the user change values and the
-  bill recompute)? If yes, that needs a recalculate endpoint — please confirm, since it is not in the PRD.
-- **Q5 — Navigation labels.** The 4 nav items show only icons `[obs]`
-  (`layout-dashboard`, `files`, `chart-no-axes-column`, `settings`). Confirm the labels
-  (Dashboard / Datasets / Reports / Settings?).
-- **Q6 — One report per dataset-run?** Confirm that "Run analysis" creates a **new immutable report**
-  each time (ADR-014), and that "Re-run" always creates a new one.
-- **Q7 — Sample datasets.** Should "Try sample data" expose the three bundled CSVs
-  (`dataset.csv`, `dataset_high.csv`, `dataset_edge.csv`) as the samples? Any renames/descriptions?
-- **Q8 — Sync vs async upload/analysis.** The "In progress / Cancel" states `[obs]` suggest async.
-  Should `POST /datasets` be async (job id) or synchronous with a client-side progress bar?
-- **Q9 — Password policy.** The "Sign up · Password validation" state `[obs]` — what exact rules
-  (minimum length, complexity) should the API report?
+- **Q1 — Figma access.** **Resolved for inspection:** MCP connected; all 15 frames screenshot-read.
+  Remaining `[unknown]`: prototype links, hover, keyboard. D-8 (accept this UI?) is still yours.
+- **Q2 — The two bill lines.** Figma `[figma-obs]` is **(a)** peak × $0.30 and off-peak × $0.20
+  with a single USD total. Product `[code]` must still expose **TOU and slab separately** in Rs
+  (INV-11). Confirm the **implemented** report: Figma household mock vs PRD multi-customer
+  analyzer (FSM, ranking, both bills).
+- **Q3 — Expected-columns guide shows 5 columns, schema has 7**, and Figma’s fifth header is
+  `off_peak_units` not `offpeak_units`. Which headers does upload actually require?
+- **Q4 — "Editable usage chart"** is only a **layer name** `[figma-obs]`; no edit UI. Confirm
+  read-only (PRD) vs editable recompute (not in PRD).
+- **Q5 — Navigation labels.** **Observed:** Dashboard, Datasets, Reports, Settings. No Datasets
+  list, Reports list, or Settings frame exists. Build those, drop the items, or add frames?
+- **Q6 — One report per dataset-run?** Confirm ADR-014 (immutable snapshot; re-run = new row).
+- **Q7 — Sample datasets.** Figma is one **Rowan House** 30-day file. Product has three bundled
+  CSVs. Which samples does “Try sample data” expose?
+- **Q8 — Sync vs async upload/analysis.** In-progress **64%** + Cancel `[figma-obs]` suggest
+  async or a client progress bar. Choose one.
+- **Q9 — Password policy.** Figma: **at least 8 characters** only. Confirm length/complexity.
 - **Q10 — Duplicate uploads.** Reject a byte-identical re-upload, or create a new dataset?
-- **Q11 — Report naming.** Auto-name (e.g. `"<dataset> · <date>"`) or let the user name it?
-- **Q12 — Chart data source.** Serve the chart series from `report_series`, or render it from
-  `result_json.daily_units`? (Affects §3.6.)
-- **Q13 — Design tokens / copy.** Palette hex values, roles, typography and spacing in frame #15 are
-  text I could not read. Do you want the Figma MCP route (Q1) to pull them, or will you provide them?
-- **Q14 — Limits.** Confirm the §5.6 caps (5 MiB / 50 000 rows / 200 issues) and the export formats
-  (CSV only, or PDF too — D-6).
-- **Q15 — Anomaly flag.** The Analysis screen has a `chart-no-axes-column`-style icon next to the budget
-  heading (`circle-check`) `[obs]`. Is any of these a distinct "warning/anomaly" flag I must compute, or
-  purely decorative?
+- **Q11 — Report naming.** Figma uses month titles (“September 2026”). Auto vs user-supplied?
+- **Q12 — Chart data source.** Figma buckets **5-day** bars for 30 days. Engine datasets are
+  typically **3 days**. Series table vs `result_json`?
+- **Q13 — Design tokens / copy.** **Resolved as observations** in `DESIGN.md` §8.2 (hex, Inter,
+  spacing). Still **not accepted** until D-8.
+- **Q14 — Limits.** Figma: **10 MB** CSV. This spec proposed **5 MiB** / 50 000 rows. Confirm.
+- **Q15 — Anomaly flag.** Budget uses `circle-check` + “Within your budget”; no separate
+  anomaly metric `[figma-obs]`. Decorative unless you want one.
+- **Q16 — Currency.** Figma `$` vs analyzer `Rs`. **Keep analyzer Rs**; do not retarget goldens.
+- **Q17 — Invalid rows.** Figma: “No report has been created” for two bad rows. INV-10: analyse
+  valid rows. Which UX?
+- **Q18 — Household vs fleet.** Figma shows one customer (Alex Morgan / C001). PRD FR-C3 requires
+  ranked customers with FSM/trend. How should the real report look?
 
 ### Assumptions (flagged, reversible)
 - **A1** The web app must reproduce golden results **exactly** (TC1 223 units/TOU Rs 780; TC2 291/TOU
@@ -665,8 +586,9 @@ returned **≤ 200** (then `issues_truncated: true`). Encoding: UTF-8 (BOM toler
   Baseline test results belong in `Brain/TEST_PLAN.md` (run them; do not copy stale “OK” claims).
 - **A5** The uploaded CSV is the only analysis input; sample datasets are copies of the three bundled
   files.
-- **A6** The design's 6-bar / 5-day chart is a mock `[obs]`; the real chart must handle **any** number of
-  days (the datasets have 3).
+- **A6** The design's 6-bar / 5-day chart and 420 kWh / $109.20 figures are **sample mocks**
+  `[figma-obs]`; real reports use analyzer output (goldens; datasets often have 3 days).
+  **Never** feed Figma numbers into the engine.
 - **A7** RLS is enabled on every table; the API is the primary authorization gate and returns 404 for
   non-owned ids.
 - **A8** Any inference marked `[inf]` is provisional until you confirm it in this section.
@@ -680,7 +602,8 @@ INV-9 CSV header · INV-10 invalid = missing/negative, excluded · INV-11 **TOU 
 ---
 
 ### Review gate
-**Do not implement this spec as-is.** Analyzer math is locked; Figma UI is not. Next useful
-engineering step after Phase 0 is **Stage 1** in `Brain/TASKS.md` (extract `analyzer_core` with
-no behavior change), after the owner confirms ADR-010–012. Q1–Q15 remain open except where
-code already answers them (INV-9 = **7 CSV columns**; INV-11 = keep TOU and slab distinct).
+**Do not implement this spec as-is.** Analyzer math is locked; Figma UI is observed but not
+accepted (D-8). Next useful engineering step after Phase 0 is **Stage 1** in `Brain/TASKS.md`
+(extract `analyzer_core` with no behavior change), after ADR-010–012. Q1/Q13 (MCP + tokens)
+are answered as observations; Q2–Q12, Q14–Q18 and D-8 remain owner decisions. Code already
+answers INV-9 = **7 CSV columns** and INV-11 = keep TOU and slab distinct.

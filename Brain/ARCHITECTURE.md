@@ -194,4 +194,6 @@ Indexes (proposed): `datasets(user_id, created_at desc)`,
 | D-8 | Visual/brand direction (`DESIGN.md`) |
 
 API shapes, upload caps, and exact route list are **not** frozen in this phase.
-A later backend spec can follow once ADR-010–012 and D-4 are accepted.
+`docs/BACKEND_SPEC.md` remains a draft; Figma now has an MCP-backed inventory
+in `DESIGN.md` §8 (D-8 still open). Figma’s Settings / Datasets / Reports nav
+implies extra list screens that are **not drawn**.
