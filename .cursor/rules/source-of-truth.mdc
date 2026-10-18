@@ -1,0 +1,17 @@
+---
+description: Document precedence and phase boundaries for this repo
+alwaysApply: true
+---
+
+# Source of truth
+
+1. The owner's current Cursor chat instructions.
+2. Behavior verified in `server.py`, `client.py`, `tests.py`, `testcases.py`, and the three CSVs.
+3. Approved ADRs in `Brain/DECISIONS.md` and requirements in `Brain/PRD.md`.
+4. Other `Brain/` docs. Keep them; do not duplicate the packet.
+5. `docs/BACKEND_SPEC.md` is a **draft**. Figma-derived screens, tokens, and API shapes are assumptions until the owner accepts them. Visual design stays undecided (`Brain/DESIGN.md`, D-8).
+6. Beginner-to-production / vibe-coding guides are process inspiration only. Do not import example-app features or stack choices.
+
+Stack ADR-010 (Next.js), ADR-011 (FastAPI), ADR-012 (Supabase) are **proposed defaults**, not accepted.
+
+Do not implement website, database, API, or auth during a docs-only phase. Never claim tests passed unless you ran them.

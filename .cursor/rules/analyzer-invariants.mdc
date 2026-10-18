@@ -1,0 +1,21 @@
+---
+description: Frozen Electricity Consumption Analyzer behavior
+globs: "{server,client,tests,testcases}.py,dataset*.csv,Brain/PRD.md"
+alwaysApply: true
+---
+
+# Analyzer invariants (do not drift)
+
+CSV columns: `record_id, customer_id, customer_name, date, day_index, peak_units, offpeak_units`.
+
+- FSM bands: `<10` LOW, `10–19` MODERATE, `20–29` HIGH, `≥30` OVERLOAD. Start `LOW`. Next state = band target (16 transitions).
+- High-usage: `total_units >= 20`.
+- **TOU** (`tou_bill`): `peak×4 + offpeak×2`. Grand total bill is TOU.
+- **Slab** (`slab_bill`): `3x` if `x≤50` else `150+5(x−50)`. Keep TOU and slab **separate**.
+- Budget Rs 500; break-even on **slab** → 120 units. Over-budget: `slab_bill > 500` (not TOU). Empty list is `["none"]` in current JSON.
+- Trend: SymPy least squares `y=ax+b`; predict day `n+1`.
+- Invalid: missing or negative peak/off-peak; count and exclude; do not crash.
+
+Goldens: TC1 223 units / TOU Rs 780; TC2 291 / TOU Rs 1040 / C07 slab over budget; TC3 10/9/1 / 191 / TOU Rs 660.
+
+Any formula change needs an ADR. Extract to `analyzer_core` only as a no-behavior-change move.
