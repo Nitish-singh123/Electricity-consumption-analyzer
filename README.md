@@ -119,7 +119,7 @@ python -m unittest -v        # verbose, 17 tests
 python -m unittest           # summary only
 ```
 
-Expected result: **`Ran 17 tests … OK`**
+Expected result: `Ran 17 tests … OK`
 
 ---
 
